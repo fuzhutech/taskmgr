@@ -1,7 +1,9 @@
 import {NgModule, SkipSelf, Optional} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpClientModule} from '@angular/common/http';
-import {MatToolbarModule, MatIconModule, MatButtonModule} from '@angular/material';
+
+import {SharedModule} from '../shared/shared.module';
+
 import {HeaderComponent} from './header/header.component';
 import {FooterComponent} from './footer/footer.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
@@ -12,8 +14,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 @NgModule({
   imports: [
-    CommonModule, HttpClientModule,
-    MatToolbarModule, MatIconModule, MatButtonModule
+    CommonModule, HttpClientModule, SharedModule
   ],
   declarations: [HeaderComponent, FooterComponent, SidebarComponent],
   exports: [
