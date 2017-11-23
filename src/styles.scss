@@ -1,5 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+//@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+//@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+//@import "~@angular/material/prebuilt-themes/pink-bluegrey.css";
+//@import "~@angular/material/prebuilt-themes/purple-green.css";
+
+@import 'theme.scss';
+
 
 html, body, app-root, mat-sidenav-container, .site {
   margin: 0;
@@ -15,15 +21,15 @@ html, body, app-root, mat-sidenav-container, .site {
 }
 
 main {
-  /*-ms-flex: 1;
-  -webkit-flex: 1;*/
+  -ms-flex: 1;
+  -webkit-flex: 1;
   flex: 1;
-  /*display: -ms-flexbox;
+  display: -ms-flexbox;
   display: -webkit-flex;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;*/
+  align-items: center;
 }
 
 .full-width {

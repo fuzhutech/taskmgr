@@ -6,7 +6,7 @@ import {MatSidenavModule, MatIconModule} from '@angular/material';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {LoginModule} from './login/login.module';
-
+import {ProjectModule} from './project/project.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import {LoginModule} from './login/login.module';
     BrowserAnimationsModule,
     AppRoutingModule,
     MatSidenavModule, MatIconModule,
-    LoginModule
+    LoginModule,
+    ProjectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
