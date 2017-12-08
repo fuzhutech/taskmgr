@@ -1,23 +1,33 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
-  selector: 'app-project-item',
-  templateUrl: './project-item.component.html',
-  styleUrls: ['./project-item.component.scss']
+    selector: 'app-project-item',
+    templateUrl: './project-item.component.html',
+    styleUrls: ['./project-item.component.scss']
 })
 export class ProjectItemComponent implements OnInit {
 
-  @Input() item;
-  @Output() onInvite = new EventEmitter<void>();
+    @Input() item;
+    @Output() onInvite = new EventEmitter<void>();
+    @Output() onEdit = new EventEmitter<void>();
+    @Output() onDel = new EventEmitter<void>();
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  onInviteClick() {
-    this.onInvite.emit();
-  }
+    onInviteClick() {
+        this.onInvite.emit();
+    }
+
+    onEditClick() {
+        this.onEdit.emit();
+    }
+
+    onDeleteClick() {
+        this.onDel.emit();
+    }
 
 }
