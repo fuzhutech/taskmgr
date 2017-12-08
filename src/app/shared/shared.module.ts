@@ -19,6 +19,7 @@ import {
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatSidenavModule,
 } from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 
@@ -42,6 +43,7 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
+        MatSidenavModule,
     ],
     exports: [
         CommonModule,
@@ -62,6 +64,7 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
         MatDatepickerModule,
         MatNativeDateModule,
         MatSelectModule,
+        MatSidenavModule,
     ],
     declarations: [
         ConfirmDialogComponent,

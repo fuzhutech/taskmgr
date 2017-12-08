@@ -2,7 +2,7 @@
 <mat-sidenav-container [class.myapp-dark-theme]="darkTheme">
 
     <mat-sidenav #sidenav mode="over" opened="false" align="start">
-        <app-sidebar></app-sidebar>
+        <app-sidebar (navClick)="sidenav.toggle()"></app-sidebar>
     </mat-sidenav>
     <div class="site">
         <header>
