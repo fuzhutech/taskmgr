@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject} from '@angular/core';
+import {Component, OnInit, Inject, ChangeDetectionStrategy} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 @Component({
@@ -14,7 +14,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
        <button mat-button mat-dialog-close type="button" (click)="onClick(false)">关闭</button>
     </mat-dialog-actions>
   `,
-    styles: []
+    styles: [],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialogComponent implements OnInit {
 

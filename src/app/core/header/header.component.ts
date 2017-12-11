@@ -1,27 +1,28 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
 
-  @Output() toggle = new EventEmitter<void>();
-  @Output() toggleDarkTheme = new EventEmitter<boolean>();
+    @Output() toggle = new EventEmitter<void>();
+    @Output() toggleDarkTheme = new EventEmitter<boolean>();
 
-  constructor() {
-  }
+    constructor() {
+    }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
-  openSidebar() {
-    this.toggle.emit();
-  }
+    openSidebar() {
+        this.toggle.emit();
+    }
 
-  onChage(checked: boolean) {
-    this.toggleDarkTheme.emit(checked);
-  }
+    onChage(checked: boolean) {
+        this.toggleDarkTheme.emit(checked);
+    }
 
 }

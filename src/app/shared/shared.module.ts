@@ -22,10 +22,12 @@ import {
     MatSidenavModule,
 } from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
+import {DirectiveModule} from '../directive/directive.module';
 
 @NgModule({
     imports: [
         CommonModule,
+        DirectiveModule,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
@@ -47,6 +49,7 @@ import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component'
     ],
     exports: [
         CommonModule,
+        DirectiveModule,
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,

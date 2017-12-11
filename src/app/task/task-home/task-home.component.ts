@@ -1,4 +1,4 @@
-import {Component, OnInit, HostBinding} from '@angular/core';
+import {Component, OnInit, HostBinding, ChangeDetectionStrategy} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {NewTaskComponent} from '../new-task/new-task.component';
 import {CopyTaskComponent} from '../copy-task/copy-task.component';
@@ -10,6 +10,7 @@ import {slideToRight} from '../../anim/router.anim';
     selector: 'app-task-home',
     templateUrl: './task-home.component.html',
     styleUrls: ['./task-home.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [slideToRight]
 })
 export class TaskHomeComponent implements OnInit {
@@ -143,6 +144,19 @@ export class TaskHomeComponent implements OnInit {
     launchNewListDialog() {
         const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: '新增列表名称'}});
         dialogRef.afterClosed().subscribe(result => console.log(result));
+    }
+
+    handleMove(srcData, list) {
+        switch (srcData.tag) {
+            case 'task-item':
+                console.log('handling item');
+                break;
+            case 'task-list':
+                console.log('handling list');
+                break;
+            default:
+                break;
+        }
     }
 
 }
