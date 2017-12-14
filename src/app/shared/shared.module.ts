@@ -24,6 +24,7 @@ import {
 } from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DirectiveModule} from '../directive/directive.module';
+import {ImageListSelectComponent} from './image-list-select/image-list-select.component';
 
 @NgModule({
     imports: [
@@ -73,9 +74,11 @@ import {DirectiveModule} from '../directive/directive.module';
         MatNativeDateModule,
         MatSelectModule,
         MatSidenavModule,
+        ImageListSelectComponent,
     ],
     declarations: [
         ConfirmDialogComponent,
+        ImageListSelectComponent,
     ],
     entryComponents: [
         ConfirmDialogComponent,
