@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {
     MatToolbarModule,
@@ -27,6 +28,8 @@ import {DirectiveModule} from '../directive/directive.module';
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         DirectiveModule,
         MatToolbarModule,
         MatIconModule,
@@ -49,6 +52,8 @@ import {DirectiveModule} from '../directive/directive.module';
     ],
     exports: [
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         DirectiveModule,
         MatToolbarModule,
         MatIconModule,
