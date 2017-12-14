@@ -13,6 +13,7 @@ import {DomSanitizer} from '@angular/platform-browser';
 
 import 'hammerjs';
 import {AppRoutingModule} from '../app-routing.module';
+import {ServicesModule} from '../services/services.module';
 
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/concat';
@@ -43,6 +44,7 @@ import 'rxjs/add/operator/do';
         SharedModule,
         HttpClientModule,
         AppRoutingModule,
+        ServicesModule.forRoot(),
         BrowserAnimationsModule,
     ],
     declarations: [
