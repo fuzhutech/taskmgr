@@ -8,7 +8,7 @@ import {FormGroup, Validators, FormBuilder} from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
-
+    selectedTab = 0;
     form: FormGroup;
 
     items: string[];
@@ -35,11 +35,24 @@ export class RegisterComponent implements OnInit {
     }
 
     onSubmit({value, valid}, e: Event) {
+        console.log(value, valid);
         e.preventDefault();
         if (!valid) {
             return;
         }
         console.log(value, valid);
+    }
+
+    prevTab() {
+        this.selectedTab = 0;
+    }
+
+    nextTab() {
+        this.selectedTab = 1;
+    }
+
+    onTabChange(index) {
+        this.selectedTab = index;
     }
 
 }
