@@ -1,5 +1,4 @@
 import {Inject, Injectable} from '@angular/core';
-import {Http} from '@angular/http';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
 import {Quote} from '../domain/quote.model';

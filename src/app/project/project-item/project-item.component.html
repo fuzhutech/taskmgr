@@ -1,11 +1,11 @@
 <mat-card>
-  <mat-card-header>
+  <mat-card-header (click)="onClick($event)">
     <mat-card-title>
       {{item.name}}
     </mat-card-title>
   </mat-card-header>
-  <img mat-card-image [src]="item.coverImg" alt="封面"/>
-  <mat-card-content>
+  <img mat-card-image [src]="item.coverImg" alt="封面" (click)="onClick($event)"/>
+  <mat-card-content (click)="onClick($event)">
     {{item.desc}}
   </mat-card-content>
 

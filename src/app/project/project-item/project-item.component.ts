@@ -22,6 +22,7 @@ import {cardAnim} from '../../anim/card.anim';
 export class ProjectItemComponent implements OnInit {
 
     @Input() item;
+    @Output() itemSelected = new EventEmitter<void>();
     @Output() onInvite = new EventEmitter<void>();
     @Output() onEdit = new EventEmitter<void>();
     @Output() onDel = new EventEmitter<void>();
@@ -53,6 +54,11 @@ export class ProjectItemComponent implements OnInit {
 
     onDeleteClick() {
         this.onDel.emit();
+    }
+
+    onClick(ev: Event) {
+        ev.preventDefault();
+        this.itemSelected.emit();
     }
 
 }
