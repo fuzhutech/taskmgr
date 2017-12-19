@@ -17,4 +17,8 @@ export class NewTaskListComponent implements OnInit {
         this.title = this.data.title;
     }
 
+    onClick() {
+        //
+    }
+
 }

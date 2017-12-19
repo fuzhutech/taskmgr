@@ -144,7 +144,7 @@ export class TaskHomeComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => console.log(result));
     }
 
-    launchNewListDialog() {
+    launchNewListDialog(event) {
         const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: '新增列表名称'}});
         dialogRef.afterClosed().subscribe(result => console.log(result));
     }
