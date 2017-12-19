@@ -73,13 +73,14 @@ export class AgeInputComponent implements ControlValueAccessor, OnInit, OnDestro
     @Input() yearsTop = 150;
     @Input() debounceTime = 300;
     private subBirth: Subscription;
-    private propagateChange = (_: any) => {};
+    private propagateChange = (_: any) => {
+    }
 
     constructor(private fb: FormBuilder) {
     }
 
     ngOnInit() {
-        const initDate = this.dateOfBirth ? this.dateOfBirth : toDate(subYears(Date.now(), 30));
+        /*const initDate = this.dateOfBirth ? this.dateOfBirth : toDate(subYears(Date.now(), 30));
         const initAge = this.toAge(initDate);
         this.form = this.fb.group({
             birthday: [initDate, this.validateDate],
@@ -87,7 +88,17 @@ export class AgeInputComponent implements ControlValueAccessor, OnInit, OnDestro
                 ageNum: [initAge.age],
                 ageUnit: [initAge.unit]
             }, {validator: this.validateAge('ageNum', 'ageUnit')})
+        });*/
+
+
+        this.form = this.fb.group({
+            birthday: ['', this.validateDate],
+            age: this.fb.group({
+                ageNum: [''],
+                ageUnit: ['']
+            }, {validator: this.validateAge('ageNum', 'ageUnit')})
         });
+
         const birthday = this.form.get('birthday');
         const ageNum = this.form.get('age').get('ageNum');
         const ageUnit = this.form.get('age').get('ageUnit');
@@ -121,13 +132,20 @@ export class AgeInputComponent implements ControlValueAccessor, OnInit, OnDestro
                 if (age.age === ageNum.value && age.unit === ageUnit.value) {
                     return;
                 }
-                ageUnit.patchValue(age.unit, {
-                    emitEvent: false,
-                    emitModelToViewChange: true,
-                    emitViewToModelChange: true
-                });
-                ageNum.patchValue(age.age, {emitEvent: false});
-                this.selectedUnit = age.unit;
+                if (age.unit !== ageUnit.value) {
+                    ageUnit.patchValue(age.unit, {
+                        emitEvent: false,
+                        emitModelToViewChange: true,
+                        emitViewToModelChange: true
+                    });
+
+                    this.selectedUnit = age.unit;
+                }
+
+                if (age.age !== ageNum.value) {
+                    ageNum.patchValue(age.age, {emitEvent: false});
+                }
+
                 this.propagateChange(date.date);
 
             } else {
@@ -144,6 +162,9 @@ export class AgeInputComponent implements ControlValueAccessor, OnInit, OnDestro
         if (obj) {
             const date = toDate(obj);
             this.form.get('birthday').patchValue(date, {emitEvent: true});
+            const age = this.toAge(obj);
+            this.form.get('age').get('ageNum').patchValue(age.age);
+            this.form.get('age').get('ageUnit').patchValue(age.unit);
         }
     }
 
