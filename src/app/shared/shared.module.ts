@@ -23,11 +23,13 @@ import {
     MatSidenavModule,
     MatButtonToggleModule,
     MatTabsModule,
+    MatChipsModule,
 } from '@angular/material';
 import {ConfirmDialogComponent} from './confirm-dialog/confirm-dialog.component';
 import {DirectiveModule} from '../directive/directive.module';
 import {ImageListSelectComponent} from './image-list-select/image-list-select.component';
 import {AgeInputComponent} from './age-input/age-input.component';
+import {ChipsListComponent} from './chips-list/chips-list.component';
 
 @NgModule({
     imports: [
@@ -55,6 +57,7 @@ import {AgeInputComponent} from './age-input/age-input.component';
         MatSidenavModule,
         MatButtonToggleModule,
         MatTabsModule,
+        MatChipsModule,
     ],
     exports: [
         CommonModule,
@@ -81,13 +84,16 @@ import {AgeInputComponent} from './age-input/age-input.component';
         MatSidenavModule,
         MatButtonToggleModule,
         MatTabsModule,
+        MatChipsModule,
         ImageListSelectComponent,
         AgeInputComponent,
+        ChipsListComponent,
     ],
     declarations: [
         ConfirmDialogComponent,
         ImageListSelectComponent,
         AgeInputComponent,
+        ChipsListComponent,
     ],
     entryComponents: [
         ConfirmDialogComponent,
