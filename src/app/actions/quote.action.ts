@@ -3,34 +3,34 @@ import {type} from '../utils/type.util';
 import {Err, Quote} from '../domain';
 
 export const ActionTypes = {
-  QUOTE: type('[Quote] Quote'),
-  QUOTE_SUCCESS: type('[Quote] Quote Success'),
-  QUOTE_FAIL: type('[Quote] Quote Fail')
+    QUOTE_LOAD: type('[Quote] Quote'),
+    QUOTE_LOAD_SUCCESS: type('[Quote] Quote Success'),
+    QUOTE_LOAD_FAIL: type('[Quote] Quote Fail')
 };
 
-export class QuoteAction implements Action {
-  type = ActionTypes.QUOTE;
+export class QuoteLoadAction implements Action {
+    type = ActionTypes.QUOTE_LOAD;
 
-  constructor(public payload: any) {
-  }
+    constructor(public payload: any = null) {
+    }
 }
 
-export class QuoteSuccessAction implements Action {
-  type = ActionTypes.QUOTE_SUCCESS;
+export class QuoteLoadSuccessAction implements Action {
+    type = ActionTypes.QUOTE_LOAD_SUCCESS;
 
-  constructor(public payload: Quote) {
-  }
+    constructor(public payload: Quote) {
+    }
 }
 
-export class QuoteFailAction implements Action {
-  type = ActionTypes.QUOTE_FAIL;
+export class QuoteLoadFailAction implements Action {
+    type = ActionTypes.QUOTE_LOAD_FAIL;
 
-  constructor(public payload: string) {
-  }
+    constructor(public payload: string) {
+    }
 }
 
 
 export type Actions
-  = QuoteAction
-  | QuoteSuccessAction
-  | QuoteFailAction;
+    = QuoteLoadAction
+    | QuoteLoadSuccessAction
+    | QuoteLoadFailAction;

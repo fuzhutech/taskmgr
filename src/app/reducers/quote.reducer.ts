@@ -9,15 +9,16 @@ export const initialState: State = {
     quote: {
         cn: '满足感在于不断的努力，而不是现有成就。全心努力定会胜利满满。',
         en: 'Satisfaction lies in the effort, not in the attainment. Full effort is full victory. ',
-        pic: 'assets/img/quote_fallback.jpg',
+        pic: '/assets/img/quotes/0.jpg',
     }
 };
 
 export function reducer(state: State = initialState, action: actions.Actions): State {
     switch (action.type) {
-        case actions.ActionTypes.QUOTE_SUCCESS:
+        case actions.ActionTypes.QUOTE_LOAD_SUCCESS:
+            // console.log('QUOTE_LOAD_SUCCESS');
             return {...state, quote: action.payload};
-        case actions.ActionTypes.QUOTE_FAIL:
+        case actions.ActionTypes.QUOTE_LOAD_FAIL:
         default:
             return state;
     }
