@@ -1,13 +1,13 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
+import {StoreModule} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
 import {
     StoreRouterConnectingModule,
     RouterStateSerializer,
 } from '@ngrx/router-store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 
 import {CoreModule} from './core/core.module';
 import {SharedModule} from './shared/shared.module';
@@ -17,7 +17,8 @@ import {ProjectModule} from './project/project.module';
 import {TaskModule} from './task/task.module';
 
 import {reducers, metaReducers, CustomRouterStateSerializer} from './reducers';
-import { environment } from '../environments/environment';
+import {environment} from '../environments/environment';
+import {QuoteEffects} from './effects/quote.effects';
 
 
 @NgModule({
@@ -69,7 +70,7 @@ import { environment } from '../environments/environment';
          *
          * See: https://github.com/ngrx/platform/blob/master/docs/effects/api.md#forroot
          */
-        EffectsModule.forRoot([]),
+        EffectsModule.forRoot([QuoteEffects]),
     ],
     providers: [
         /**
@@ -77,7 +78,7 @@ import { environment } from '../environments/environment';
          * A custom RouterStateSerializer is used to parse the `RouterStateSnapshot` provided
          * by `@ngrx/router-store` to include only the desired pieces of the snapshot.
          */
-        { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
+        {provide: RouterStateSerializer, useClass: CustomRouterStateSerializer},
     ],
     bootstrap: [AppComponent]
 })
