@@ -19,6 +19,7 @@ import {TaskModule} from './task/task.module';
 import {reducers, metaReducers, CustomRouterStateSerializer} from './reducers';
 import {environment} from '../environments/environment';
 import {QuoteEffects} from './effects/quote.effects';
+import {AuthEffects} from './effects/auth.effects';
 
 
 @NgModule({
@@ -70,7 +71,7 @@ import {QuoteEffects} from './effects/quote.effects';
          *
          * See: https://github.com/ngrx/platform/blob/master/docs/effects/api.md#forroot
          */
-        EffectsModule.forRoot([QuoteEffects]),
+        EffectsModule.forRoot([QuoteEffects, AuthEffects]),
     ],
     providers: [
         /**

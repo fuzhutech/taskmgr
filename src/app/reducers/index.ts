@@ -54,6 +54,9 @@ import {storeFreeze} from 'ngrx-store-freeze';
  */
 
 import * as fromQuote from './quote.reducer';
+import * as fromAuth from './auth.reducer';
+
+import {Auth} from '../domain';
 
 /**
  * As mentioned, we treat each reducer like a table in a database. This means
@@ -61,6 +64,7 @@ import * as fromQuote from './quote.reducer';
  */
 export interface State {
     quote: fromQuote.State;
+    auth: Auth;
     routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
@@ -72,6 +76,7 @@ export interface State {
 export const reducers: ActionReducerMap<State> = {
     quote: fromQuote.reducer,
     routerReducer: fromRouter.routerReducer,
+    auth: fromAuth.reducer
 };
 
 // console.log all actions
@@ -95,6 +100,8 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
 
 
 export const getQuoteState = (state: State) => state.quote;
+export const getAuthState = (state: State) => state.auth;
 
 // 带【记忆】功能的函数运算，无论多少个参数，最后一个才是用于函数计算，其他的都是它的输入
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
+export const getAuth = createSelector(getAuthState, fromAuth.getAuth);

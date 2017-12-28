@@ -5,6 +5,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {extractInfo, getAddrByCode, isValidAddr} from '../../utils/identity.util';
 import {isValidDate, toDate} from '../../utils/date.util';
 
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import * as actions from '../../actions/auth.action';
+
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
@@ -20,7 +24,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _sub: Subscription;
     private readonly avatarName = 'avatars';
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private store$: Store<fromRoot.State>) {
     }
 
     ngOnInit() {
@@ -70,7 +74,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         if (!valid) {
             return;
         }
-        console.log(value, valid);
+        this.store$.dispatch(
+            new actions.RegisterAction(value));
     }
 
     prevTab() {

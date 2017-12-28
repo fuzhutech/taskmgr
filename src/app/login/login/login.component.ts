@@ -4,6 +4,7 @@ import {Quote} from '../../domain/quote.model';
 import {Store} from '@ngrx/store';
 import * as fromRoot from '../../reducers';
 import * as actions from '../../actions/quote.action';
+import * as authActions from '../../actions/auth.action';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
@@ -34,8 +35,14 @@ export class LoginComponent implements OnInit {
 
     onSubmit({value, valid}, ev: Event) {
         ev.preventDefault();
-        console.log(value, valid);
-        // this.form.controls['email'].setValidators(this.validate);
+        if (!valid) {
+            return;
+        }
+        this.store$.dispatch(
+            new authActions.LoginAction({
+                email: value.email,
+                password: value.password
+            }));
     }
 
     validate(c: FormControl): { [key: string]: any } {
@@ -43,13 +50,13 @@ export class LoginComponent implements OnInit {
             return null;
         }
 
-        const pattern = /^wang+/;
+        /*const pattern = /^wang+/;
         if (pattern.test(c.value)) {
             return null;
         }
         return {
             emailNotValid: 'The email must start with wang'
-        };
+        };*/
     }
 
 }

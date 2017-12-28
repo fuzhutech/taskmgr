@@ -53,6 +53,7 @@ export class AuthService {
      * @param password 密码（明文），服务器会进行加密处理
      */
     login(email: string, password: string): Observable<Auth> {
+        console.log(email, password);
         const uri = `${this.config.uri}/users`;
         return this.http
             .get(uri, {params: {'email': email, 'password': password}})
