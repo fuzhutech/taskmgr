@@ -71,7 +71,7 @@ import {AuthEffects} from './effects/auth.effects';
          *
          * See: https://github.com/ngrx/platform/blob/master/docs/effects/api.md#forroot
          */
-        EffectsModule.forRoot([QuoteEffects, AuthEffects]),
+        EffectsModule.forRoot([]),
     ],
     providers: [
         /**

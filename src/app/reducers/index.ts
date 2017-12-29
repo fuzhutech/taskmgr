@@ -52,9 +52,16 @@ import {storeFreeze} from 'ngrx-store-freeze';
  * the state of the reducer plus any selector functions. The `* as`
  * notation packages up all of the exports into a single object.
  */
-
+/**
+ * 分别从每个 reducer 中将需要导出的函数或对象进行导出，并起个易懂的名字
+ */
 import * as fromQuote from './quote.reducer';
 import * as fromAuth from './auth.reducer';
+import * as fromProjects from './project.reducer';
+import * as fromTaskLists from './task-list.reducer';
+import * as fromTasks from './task.reducer';
+import * as fromUsers from './user.reducer';
+import * as fromTheme from './theme.reducer';
 
 import {Auth} from '../domain';
 
@@ -65,6 +72,11 @@ import {Auth} from '../domain';
 export interface State {
     quote: fromQuote.State;
     auth: Auth;
+    projects: fromProjects.State;
+    taskLists: fromTaskLists.State;
+    tasks: fromTasks.State;
+    users: fromUsers.State;
+    theme: fromTheme.State;
     routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
 }
 
@@ -75,8 +87,13 @@ export interface State {
  */
 export const reducers: ActionReducerMap<State> = {
     quote: fromQuote.reducer,
-    routerReducer: fromRouter.routerReducer,
-    auth: fromAuth.reducer
+    auth: fromAuth.reducer,
+    projects: fromProjects.reducer,
+    taskLists: fromTaskLists.reducer,
+    tasks: fromTasks.reducer,
+    users: fromUsers.reducer,
+    theme: fromTheme.reducer,
+    routerReducer: fromRouter.routerReducer
 };
 
 // console.log all actions
@@ -101,7 +118,16 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
 
 export const getQuoteState = (state: State) => state.quote;
 export const getAuthState = (state: State) => state.auth;
+export const getProjectsState = (state: State) => state.projects;
+export const getTaskListsState = (state: State) => state.taskLists;
+export const getTasksState = (state: State) => state.tasks;
+export const getUserState = (state: State) => state.users;
+export const getThemeState = (state: State) => state.theme;
 
 // 带【记忆】功能的函数运算，无论多少个参数，最后一个才是用于函数计算，其他的都是它的输入
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
 export const getAuth = createSelector(getAuthState, fromAuth.getAuth);
+export const getProjects = createSelector(getProjectsState, fromProjects.getAll);
+export const getTasks = createSelector(getTasksState, fromTasks.getTasks);
+export const getUsers = createSelector(getUserState, fromUsers.getUsers);
+export const getTheme = createSelector(getThemeState, fromTheme.getTheme);

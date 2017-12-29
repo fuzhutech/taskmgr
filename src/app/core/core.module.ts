@@ -40,6 +40,8 @@ import 'rxjs/add/operator/count';
 import 'rxjs/add/operator/do';
 import '../utils/debug.util';
 
+import {AppEffectsModule} from '../effects';
+
 @NgModule({
     imports: [
         SharedModule,
@@ -47,6 +49,7 @@ import '../utils/debug.util';
         AppRoutingModule,
         ServicesModule.forRoot(),
         BrowserAnimationsModule,
+        AppEffectsModule
     ],
     declarations: [
         HeaderComponent,
