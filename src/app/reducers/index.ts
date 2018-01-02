@@ -33,6 +33,7 @@ import {
     createFeatureSelector,
     ActionReducer,
     MetaReducer,
+    Action
 } from '@ngrx/store';
 import {environment} from '../../environments/environment';
 import * as fromRouter from '@ngrx/router-store';
@@ -70,14 +71,14 @@ import {Auth} from '../domain';
  * our top level state interface is just a map of keys to inner state types.
  */
 export interface State {
-    quote: fromQuote.State;
     auth: Auth;
     projects: fromProjects.State;
+    quote: fromQuote.State;
+    routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
     taskLists: fromTaskLists.State;
     tasks: fromTasks.State;
-    users: fromUsers.State;
     theme: fromTheme.State;
-    routerReducer: fromRouter.RouterReducerState<RouterStateUrl>;
+    users: fromUsers.State;
 }
 
 /**
@@ -86,14 +87,14 @@ export interface State {
  * and the current or initial state and return a new immutable state.
  */
 export const reducers: ActionReducerMap<State> = {
-    quote: fromQuote.reducer,
     auth: fromAuth.reducer,
+    quote: fromQuote.reducer,
     projects: fromProjects.reducer,
+    routerReducer: fromRouter.routerReducer,
     taskLists: fromTaskLists.reducer,
     tasks: fromTasks.reducer,
-    users: fromUsers.reducer,
     theme: fromTheme.reducer,
-    routerReducer: fromRouter.routerReducer
+    users: fromUsers.reducer
 };
 
 // console.log all actions
@@ -106,15 +107,13 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
     };
 }
 
+// noinspection TypeScriptValidateTypes
 /**
  * By default, @ngrx/store uses combineReducers with the reducer map to compose
  * the root meta-reducer. To add more meta-reducers, provide an array of meta-reducers
  * that will be composed to form the root meta-reducer.
  */
-export const metaReducers: MetaReducer<State>[] = !environment.production
-    ? [logger, storeFreeze]
-    : [];
-
+export const metaReducers: MetaReducer<State>[] = !environment.production ? [logger, storeFreeze] : [];
 
 export const getQuoteState = (state: State) => state.quote;
 export const getAuthState = (state: State) => state.auth;
