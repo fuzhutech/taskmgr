@@ -57,8 +57,18 @@ export class ProjectListComponent implements OnInit, OnDestroy {
             });
     }
 
-    launchInvite() {
-        const dialogRef = this.dialog.open(InviteComponent, {data: {members: []}});
+    launchInvite(project) {
+        let members = [];
+        this.store$.select(fromRoot.getProjectMembers(project.id))
+            .take(1)
+            .subscribe(m => members = m);
+        const dialogRef = this.dialog.open(InviteComponent, {data: {members: members}});
+        // 使用 take(1) 来自动销毁订阅，因为 take(1) 意味着接收到 1 个数据后就完成了
+        dialogRef.afterClosed().take(1).subscribe(val => {
+            if (val) {
+                this.store$.dispatch(new actions.InviteMembersAction({projectId: project.id, members: val}));
+            }
+        });
     }
 
     launchUpdateDialog(project: Project) {

@@ -3,7 +3,7 @@
                       [item]="project"
                       (itemSelected)="selectProject(project)"
                       class="card"
-                      (onInvite)="launchInvite()"
+                      (onInvite)="launchInvite(project)"
                       (onEdit)="launchUpdateDialog(project)"
                       (onDel)="launchConfirmDialog(project)">
 
