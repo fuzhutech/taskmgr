@@ -125,8 +125,44 @@ export const getThemeState = (state: State) => state.theme;
 
 // 带【记忆】功能的函数运算，无论多少个参数，最后一个才是用于函数计算，其他的都是它的输入
 export const getQuote = createSelector(getQuoteState, fromQuote.getQuote);
-export const getAuth = createSelector(getAuthState, fromAuth.getAuth);
 export const getProjects = createSelector(getProjectsState, fromProjects.getAll);
 export const getTasks = createSelector(getTasksState, fromTasks.getTasks);
 export const getUsers = createSelector(getUserState, fromUsers.getUsers);
 export const getTheme = createSelector(getThemeState, fromTheme.getTheme);
+
+const getSelectedProjectId = createSelector(getProjectsState, fromProjects.getSelectedId);
+const getTaskLists = createSelector(getTaskListsState, fromTaskLists.getTaskLists);
+const getTaskListEntities = createSelector(getTaskListsState, fromTaskLists.getEntities);
+const getTaskListSelectedIds = createSelector(getTaskListsState, fromTaskLists.getSelectedIds);
+const getCurrentAuth = createSelector(getAuthState, fromAuth.getAuth);
+const getProjectEntities = createSelector(getProjectsState, fromProjects.getEntities);
+const getUserEntities = createSelector(getUserState, fromUsers.getEntities);
+const getTasksWithOwner = createSelector(getTasks, getUserEntities, (tasks, entities) => tasks.map(task =>
+    (
+        {...task,
+            owner: entities[task.ownerId],
+            participants: task.participantIds.map(id => entities[id])
+        }
+    )));
+export const getSelectedProject = createSelector(getProjectEntities, getSelectedProjectId, (entities, id) => {
+    return entities[id];
+});
+export const getProjectTaskList = createSelector(getSelectedProjectId, getTaskLists, (projectId, taskLists) => {
+    return taskLists.filter(taskList => taskList.projectId === projectId);
+});
+export const getTasksByList = createSelector(getProjectTaskList, getTasksWithOwner, (lists, tasks) => {
+    return lists.map(list => ({...list, tasks: tasks.filter(task => task.taskListId === list.id)}));
+});
+export const getProjectMembers = (projectId: string) => createSelector(getProjectsState, getUserEntities, (state, entities) => {
+    return state.entities[projectId].members.map(id => entities[id]);
+});
+export const getAuth = createSelector(getCurrentAuth, getUserEntities, (_auth, _entities) => {
+    return {..._auth, user: _entities[_auth.userId]};
+});
+export const getAuthUser = createSelector(getCurrentAuth, getUserEntities, (_auth, _entities) => {
+    return _entities[_auth.userId];
+});
+export const getMaxListOrder = createSelector(getTaskListEntities, getTaskListSelectedIds, (entities, ids) => {
+    const orders: number[] = ids.map(id => entities[id].order);
+    return orders.sort()[orders.length - 1];
+});

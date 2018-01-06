@@ -1,11 +1,20 @@
-import {Component, OnInit, HostBinding, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, HostBinding, ChangeDetectionStrategy, OnDestroy} from '@angular/core';
 import {MatDialog} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
 import {NewTaskComponent} from '../new-task/new-task.component';
 import {CopyTaskComponent} from '../copy-task/copy-task.component';
 import {ConfirmDialogComponent} from '../../shared/confirm-dialog/confirm-dialog.component';
 import {NewTaskListComponent} from '../new-task-list/new-task-list.component';
 import {slideToRight} from '../../anim/router.anim';
-import {TaskListService} from "../../services/task-list.service";
+import {TaskListService} from '../../services/task-list.service';
+import {Store} from '@ngrx/store';
+import * as fromRoot from '../../reducers';
+import * as listActions from '../../actions/task-list.action';
+import * as taskActions from '../../actions/task.action';
+import {Task, TaskList} from '../../domain';
+import {Observable} from 'rxjs/Observable';
+import {Subscription} from 'rxjs/Subscription';
+import {TaskListVM} from '../../vm/task-list.vm';
 
 @Component({
     selector: 'app-task-home',
@@ -14,65 +23,155 @@ import {TaskListService} from "../../services/task-list.service";
     // changeDetection: ChangeDetectionStrategy.OnPush,
     animations: [slideToRight]
 })
-export class TaskHomeComponent implements OnInit {
+export class TaskHomeComponent implements OnDestroy {
 
     @HostBinding('@routeAnim') state;
+    lists$: Observable<TaskListVM[]>;
 
-    lists;
+    private projectId: string;
+    private routeParamSub: Subscription;
 
-    constructor(private  dialog: MatDialog, private service$: TaskListService) {
-        this.service$.get('Hya1moGb-').subscribe(lists => this.lists = lists);
+    constructor(private route: ActivatedRoute,
+                private dialog: MatDialog,
+                private store$: Store<fromRoot.State>) {
+        const routeParam$ = this.route.params.pluck('id');
+        this.routeParamSub = routeParam$.subscribe(
+            (id: string) => {
+                this.projectId = id;
+            });
+        this.lists$ = this.store$.select(fromRoot.getTasksByList);
     }
 
-    ngOnInit() {
+    ngOnDestroy() {
+        // 取消订阅以免内存泄露
+        if (this.routeParamSub) {
+            this.routeParamSub.unsubscribe();
+        }
     }
 
-    launchNewTaskDialog() {
-        this.dialog.open(NewTaskComponent, {data: {title: '新建任务'}});
+    handleRenameList(list: TaskList) {
+        const dialogRef = this.dialog.open(NewTaskListComponent, {data: {name: list.name}});
+        dialogRef.afterClosed().take(1).filter(n => n).subscribe(name => {
+            this.store$.dispatch(new listActions.UpdateTaskListAction({...list, name: name}));
+        });
     }
 
-    launchCopyTaskDialog() {
-        this.dialog.open(CopyTaskComponent, {data: {lists: this.lists}});
+    handleNewTaskList(ev: Event) {
+        ev.preventDefault();
+        const dialogRef = this.dialog.open(NewTaskListComponent, {data: {}});
+        dialogRef.afterClosed()
+            .take(1)
+            .filter(n => n)
+            .withLatestFrom(this.store$.select(fromRoot.getMaxListOrder), (_n, _o) => {
+                return {
+                    name: _n,
+                    order: _o
+                };
+            })
+            .subscribe(({name, order}) => {
+                this.store$.dispatch(new listActions.AddTaskListAction({
+                    name: name,
+                    order: order + 1,
+                    projectId: this.projectId
+                }));
+            });
     }
 
-    launchUpdateTaskDialog(task) {
-        const dialogRef = this.dialog.open(NewTaskComponent, {data: {title: '修改任务', task: task}});
+    handleMoveList(listId: string) {
+        const list$ = this.store$
+            .select(fromRoot.getProjectTaskList)
+            .map(lists => lists.filter(list => list.id !== listId));
+        const dialogRef = this.dialog.open(CopyTaskComponent, {data: {srcListId: listId, lists: list$}});
+        dialogRef.afterClosed().take(1).filter(n => n).subscribe(val => {
+            this.store$.dispatch(new taskActions.MoveAllAction(val));
+        });
     }
 
-    launchConfirmDialog() {
-        const dialogRef = this.dialog.open(ConfirmDialogComponent, {data: {title: '删除列表', content: '你确认删除该列表吗?'}});
-        dialogRef.afterClosed().subscribe(result => console.log(result));
+    handleDelList(list: TaskList) {
+        const confirm = {
+            title: '删除项目：',
+            content: '确认要删除该任务列表？',
+            confirmAction: '确认删除'
+        };
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {data: {dialog: confirm}});
+
+        // 使用 take(1) 来自动销毁订阅，因为 take(1) 意味着接收到 1 个数据后就完成了
+        dialogRef.afterClosed().take(1).subscribe(val => {
+            if (val) {
+                this.store$.dispatch(new listActions.DeleteTaskListAction(list));
+            }
+        });
     }
 
-    launchEditListDialog() {
-        const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: '修改列表名称'}});
-        dialogRef.afterClosed().subscribe(result => console.log(result));
+    handleCompleteTask(task) {
+        this.store$.dispatch(new taskActions.CompleteTaskAction(task));
     }
 
-    launchNewListDialog(event) {
-        const dialogRef = this.dialog.open(NewTaskListComponent, {data: {title: '新增列表名称'}});
-        dialogRef.afterClosed().subscribe(result => console.log(result));
-    }
-
-    handleMove(srcData, list) {
+    handleMove(srcData, taskList: TaskList) {
         switch (srcData.tag) {
-            case 'task-item':
-                console.log('handling item');
+            case 'task-item': {
+                this.store$.dispatch(new taskActions.MoveTaskAction({
+                    taskId: srcData.data.id,
+                    taskListId: taskList.id
+                }));
                 break;
-            case 'task-list':
-                console.log('handling list');
-                const srcList = srcData.data;
-                const tempOrder = srcList.order;
-                srcList.order = list.order;
-                list.order = tempOrder;
+            }
+            case 'task-list': {
+                this.store$.dispatch(new listActions.SwapOrderAction({src: srcData.data, target: taskList}));
                 break;
+            }
             default:
                 break;
         }
     }
 
+    handleAddTask(listId: string) {
+        const user$ = this.store$.select(fromRoot.getAuthUser);
+        user$.take(1).subscribe(user => {
+            const dialogRef = this.dialog.open(NewTaskComponent, {data: {owner: user}});
+            dialogRef.afterClosed()
+                .take(1)
+                .filter(n => n)
+                .subscribe(val => {
+                    this.store$.dispatch(new taskActions.AddTaskAction({
+                        ...val.task,
+                        taskListId: listId,
+                        completed: false,
+                        createDate: new Date()
+                    }));
+                });
+        });
+    }
+
+    handleUpdateTask(task: Task) {
+        const dialogRef = this.dialog.open(NewTaskComponent, {data: {task: task}});
+        dialogRef.afterClosed()
+            .take(1)
+            .filter(n => n)
+            .subscribe((val) => {
+                if (val.type !== 'delete') {
+                    this.store$.dispatch(new taskActions.UpdateTaskAction({...task, ...val.task}));
+                } else {
+                    this.store$.dispatch(new taskActions.DeleteTaskAction(val.task));
+                }
+            });
+    }
+
     handleQuickTask(desc: string, listId: string) {
-        console.log(desc, listId);
+        const user$ = this.store$.select(fromRoot.getAuthUser);
+        user$.take(1).subscribe(user => {
+            this.store$.dispatch(new taskActions.AddTaskAction({
+                desc: desc,
+                priority: 3,
+                remark: null,
+                ownerId: user.id,
+                participantIds: [],
+                taskListId: listId,
+                completed: false,
+                createDate: new Date()
+            }));
+        });
+
     }
 
 }

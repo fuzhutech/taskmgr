@@ -44,15 +44,18 @@ export class ProjectItemComponent implements OnInit {
         this.cardState = 'out';
     }
 
-    onInviteClick() {
+    onInviteClick(ev: Event) {
+        ev.preventDefault();
         this.onInvite.emit();
     }
 
-    onEditClick() {
+    onEditClick(ev: Event) {
+        ev.preventDefault();
         this.onEdit.emit();
     }
 
-    onDeleteClick() {
+    onDeleteClick(ev: Event) {
+        ev.preventDefault();
         this.onDel.emit();
     }
 
